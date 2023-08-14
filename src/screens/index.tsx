@@ -1,9 +1,15 @@
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { AppContainer, TaskItem, Container, Column, TaskList } from '../components';
 import { useTasksStore } from '../store/tasksStore';
+import { useEffect, useState } from 'react';
 
 export const HomeScreen = () => {
     const { tasks, handleDragEnd } = useTasksStore();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     return (
         <AppContainer>
@@ -22,7 +28,7 @@ export const HomeScreen = () => {
                                     flex={index === 0 ? 1 : 0}
                                 >
 
-                                    <Droppable droppableId={columnId}>
+                                    {isMounted ? <Droppable droppableId={columnId}>
                                         {(provided) => (
                                             <TaskList
                                                 ref={provided.innerRef}
@@ -34,7 +40,7 @@ export const HomeScreen = () => {
                                                 {provided.placeholder}
                                             </TaskList>
                                         )}
-                                    </Droppable>
+                                    </Droppable> : null}
                                 </Column>
                             );
                         })}
